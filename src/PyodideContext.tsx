@@ -66,7 +66,7 @@ declare global {
 
 export const PyodideContext = createContext<IPyodide | null | undefined>(undefined);
 
-export const PyodideProvider: React.FC<any> = () => {
+export const PyodideProvider: React.FC<any> = ({ children }) => {
     const [pyodideReady, setPyodideReady] = useState<IPyodide | null | undefined>(null);
 
     // Load Pyodide.
@@ -84,6 +84,7 @@ export const PyodideProvider: React.FC<any> = () => {
 
     return <PyodideContext.Provider value={pyodideReady}>
         Python Renderer!
+        {children}
     </PyodideContext.Provider>
 }
 
