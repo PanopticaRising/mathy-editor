@@ -1,11 +1,10 @@
 import { FC, useState } from "react";
-import { PyodideContext } from "../PyodideContext";
 
 // TODO: Don't pass the raw pyodide object.
-export const Form: FC<{pyodide: any}> = ({pyodide}) => {
+export const Form: FC<{ pyodide: any }> = ({ pyodide }) => {
     const [problemCode, setProblemCode] = useState('2+2')
     const [msg, setMsg] = useState<string | null>(null);
-    
+
     const onSubmit = (x: any) => {
         x.preventDefault()
         console.log(x);
@@ -17,7 +16,7 @@ export const Form: FC<{pyodide: any}> = ({pyodide}) => {
         setMsg(`${sol === parseInt(val, 10)}`);
         return false;
     }
-    
+
     const showAnswer = () => {
         setMsg(`Solution: ${pyodide.runPython(problemCode)}`);
     }
@@ -28,12 +27,12 @@ export const Form: FC<{pyodide: any}> = ({pyodide}) => {
     }
 
     return <form onSubmit={onSubmit}>
-        Write your Python solver code here:<br/>
-        <textarea id='code' onKeyUp={updateProblemCode} /><br/>
-        {msg}<br/>
-        Solve {problemCode}.<br/>
-        <input id='hw' /><br/>
-        <button onClick={showAnswer} type='button'>Show Answer</button><br/>
-        <button type='submit'>Solve</button><br/>
+        Write your Python solver code here:<br />
+        <textarea id='code' onKeyUp={updateProblemCode} /><br />
+        {msg}<br />
+        Solve {problemCode}.<br />
+        <input id='hw' /><br />
+        <button onClick={showAnswer} type='button'>Show Answer</button><br />
+        <button type='submit'>Solve</button><br />
     </form>
 }

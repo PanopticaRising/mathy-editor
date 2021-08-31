@@ -1,20 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { PyodideProvider, PyodideContext } from './PyodideContext';
-import { Form } from './Mocks/Form';
+import { PyodideProvider } from './PyodideContext';
+import GlobalTheme from './GlobalTheme';
+import { Routing } from './Routing';
+import { PluginProvider } from './PluginManager/Loaders/PluginProvider';
+import { VarPluginProvider } from './PluginManager/Loaders/VarPluginProvider';
+import { SaveStateProvider } from './PluginManager/Loaders/SaveStateManager';
+import { StudentInputProvider } from './PluginManager/Loaders/StudentInputManager';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <PyodideProvider>
-          <PyodideContext.Consumer>
-            {value => <Form pyodide={value}></Form>}
-          </PyodideContext.Consumer>
-        </PyodideProvider>
-      </header>
-    </div>
+    <GlobalTheme>
+      <PyodideProvider>
+        <PluginProvider>
+          <VarPluginProvider>
+            <SaveStateProvider>
+              <StudentInputProvider>
+                <Routing />
+              </StudentInputProvider>
+            </SaveStateProvider>
+          </VarPluginProvider>
+        </PluginProvider>
+      </PyodideProvider>
+    </GlobalTheme>
   );
 }
 
