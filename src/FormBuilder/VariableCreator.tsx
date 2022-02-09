@@ -5,6 +5,7 @@ import { Box } from "@material-ui/system"
 import _ from "lodash";
 import React from "react";
 import { DragEventHandler, useContext, useState } from "react";
+import { useVariableCustomization } from "../PluginManager/Loaders/SaveStateManager";
 import { VarPluginContext } from "../PluginManager/Loaders/VarPluginProvider";
 
 interface VariableCreatorProps {
@@ -24,8 +25,9 @@ type SupportedVariablePlugins = string;
 export const VariableCreator: React.FC<VariableCreatorProps> = ({ id, }) => {
     const VarPlugins = useContext(VarPluginContext);
     const [varType, setVarType] = useState<SupportedVariablePlugins | null>(VarPlugins[0]?.type);
+    const { state, updateState } = useVariableCustomization(id);
 
-    const createVariableInterpolationSyntax: DragEventHandler<HTMLDivElement> = (ev) => ev.dataTransfer.setData("text/plain", `\${${id}}`);
+    const createVariableInterpolationSyntax: DragEventHandler<HTMLDivElement> = (ev) => ev.dataTransfer.setData("text/plain", `\${${state.uniqueIdentifier ?? id}}`);
 
     const selectedVar = _.find(VarPlugins, ['type', varType]);
 
@@ -42,7 +44,7 @@ export const VariableCreator: React.FC<VariableCreatorProps> = ({ id, }) => {
         }}
     >
         {/* TODO: Add "Copy to Clipboard" and "Click to Edit" with hover states. */}
-        <h5>To reference this variable, drag it into an input box or use <code>$&#123;{id}&#125;</code> in your code.</h5>
+        <h5>To reference this variable, drag it into an input box or use <code>$&#123;{state.uniqueIdentifier ?? id}&#125;</code> in your code.</h5>
         <Select
             value={varType}
             onChange={(e) => setVarType(e.target.value as string)}
@@ -50,7 +52,7 @@ export const VariableCreator: React.FC<VariableCreatorProps> = ({ id, }) => {
             {VarPlugins.map(plug => <MenuItem key={plug.type} value={plug.type}>{_.startCase(plug.type)}</MenuItem>)}
         </Select>
         {selectedVar &&
-            React.createElement(selectedVar.interface)
+            React.createElement(selectedVar.interface, { uniqueIdentifier: id })
         }
     </Box>
 }

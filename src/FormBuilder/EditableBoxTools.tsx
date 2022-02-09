@@ -17,6 +17,7 @@ export const EditableBoxTools: React.FC<{ visible: boolean, dragHandleProps: any
     const classes = useStyles({ visible });
 
     return <ButtonGroup size='small' aria-label='Component editing tools' className={classes.floatingTools}>
+        {/* TODO: Pass in editMode so button can be styled differently when active */}
         <Button aria-label="edit" onClick={onClickEdit}>
             <Edit />
         </Button>
@@ -25,6 +26,7 @@ export const EditableBoxTools: React.FC<{ visible: boolean, dragHandleProps: any
         }}>
             <Delete />
         </Button>
+        {/* TODO: While using react-beautiful-dnd hack, disable drag handle when editMode is not active on the parent. */}
         <Button aria-label="drag to reorder" sx={{
             borderBottomRightRadius: '8px'
         }} {...dragHandleProps} >

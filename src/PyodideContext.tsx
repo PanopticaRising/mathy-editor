@@ -1,5 +1,4 @@
-import { useEffect, useState, createContext } from "react"
-import _ from 'lodash';
+import { createContext, useRef } from "react"
 
 // https://pyodide.org/en/stable/usage/api/js-api.html#pyproxy
 interface PyProxy extends Iterable<unknown> {
@@ -53,7 +52,7 @@ interface IPyodide {
     loadedPackages: Record<string, unknown>;
     version: string;
 
-    loadPackage: (names: string | Array<string> | PyProxy, messageCallback: (progress: unknown) => void, errorCallback: (error: unknown) => void) => Promise<unknown>;
+    loadPackage: (names: string | Array<string> | PyProxy, messageCallback?: (progress: unknown) => void, errorCallback?: (error: unknown) => void) => Promise<unknown>;
     runPython: (code: string, globals?: Record<any, any>) => Promise<unknown>;
     runPythonAsync: (code: string, messageCallback: (progress: unknown) => void, errorCallback: (error: unknown) => void) => Promise<unknown>;
 }
@@ -65,28 +64,25 @@ declare global {
     }
 }
 
-export const PyodideContext = createContext<IPyodide | null | undefined>(undefined);
+// export const PyodideContext = createContext<IPyodide | null | undefined>(undefined);
+export const PyodideContext = createContext<((script: string, context: Object | undefined) => Promise<unknown>) | undefined>(undefined);
 
 export const PyodideProvider: React.FC<any> = ({ children }) => {
-    const [pyodideReady, setPyodideReady] = useState<IPyodide | null | undefined>(null);
+    const pyRef = useRef<Worker>(new Worker('./pyodide.worker.js'));
 
-    // Load Pyodide.
-    useEffect(() => {
-        (async () => {
-            if (!_.isEmpty(window.pyodide)) {
-                return;
-            }
-            const pyodide = await window.loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.17.0/full/" });
-            // Pyodide is now ready to use...
-            console.log(pyodide.runPython(`
-              import sys
-              sys.version
-            `));
-            setPyodideReady(pyodide);
-        })();
-    }, []);
+    //    const {results, error} = await asyncRun(script, context);
+    function asyncRun(script: string, context?: Object) {
+        return new Promise(function (onSuccess, onError) {
+            pyRef.current.onerror = onError;
+            pyRef.current.onmessage = (e) => onSuccess(e.data.results);
+            pyRef.current.postMessage({
+                ...context,
+                python: script,
+            });
+        });
+    }
 
-    return <PyodideContext.Provider value={pyodideReady}>
+    return <PyodideContext.Provider value={asyncRun}>
         {children}
     </PyodideContext.Provider>
 }

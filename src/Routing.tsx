@@ -1,15 +1,19 @@
-import { Box, Grid, Tab } from "@material-ui/core";
+import { Box, Container, Grid, Tab } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import { SyntheticEvent, useState } from "react";
 import { FormBuilderPane } from "./FormBuilder/FormBuilderPane";
 import { Form } from './Mocks/Form';
 import { PyodideContext } from './PyodideContext';
+import { FormPreview } from './FormBuilder/FormPreview';
+import { CoderPane } from "./CodeManager/CoderPane";
+import _ from "lodash";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
 enum RoutingTabs {
     DESIGNER = 'Designer',
     CODER = 'Coder',
     VALIDATOR = 'Validator',
-    DEBUG = 'DEBUG',
+    DEBUG = 'Preview',
 }
 
 // This SPA has one screen, but multiple tabs.
@@ -38,15 +42,23 @@ export const Routing: React.FC = () => {
                     </Grid>
                 </Grid>
                 <TabPanel value={RoutingTabs.DESIGNER}><FormBuilderPane /></TabPanel>
-                <TabPanel value={RoutingTabs.CODER}>Code Pane</TabPanel>
+                <TabPanel value={RoutingTabs.CODER}><CoderPane /></TabPanel>
                 <TabPanel value={RoutingTabs.VALIDATOR}>Test Pane</TabPanel>
                 <TabPanel value={RoutingTabs.DEBUG}>
-                    <PyodideContext.Consumer>
+                    <Container>
+                        <DragDropContext onDragEnd={_.noop}>
+                            <Droppable isDropDisabled={true} droppableId={'DEFAULT'}>
+                                {() => <FormPreview />}
+                            </Droppable>
+                        </DragDropContext>
+
+                    </Container>
+                    {/* <PyodideContext.Consumer>
                         {value =>
                             <Form pyodide={value}>
                             </Form>
                         }
-                    </PyodideContext.Consumer>
+                    </PyodideContext.Consumer> */}
                 </TabPanel>
             </TabContext>
         </Box>

@@ -3,8 +3,16 @@
  * This space will then be collected and ported into Python for solution comparisons.
  */
 
-import _, { uniq } from "lodash";
-import { createContext, Dispatch, Reducer, useContext, useReducer } from "react";
+import _ from "lodash";
+import { createContext, Dispatch, Reducer, useContext, useEffect, useReducer, useState } from "react";
+import { Chance } from 'chance';
+
+declare global {
+    interface Window {
+        chance: Chance.Chance;
+    }
+}
+
 
 // TODO: Move to a more central location.
 export type StudentInputs = {
@@ -14,7 +22,7 @@ export type StudentInputs = {
 /**
  * 
  */
-interface StudentInputData {
+export interface StudentInputData {
     // The unique name of the Component the input is targetting
     [uniqueName: string]: StudentInputs
 }
@@ -23,6 +31,7 @@ type SaveActions =
     | { type: 'SetStudentInput', uniqueName: string, studentInputs: StudentInputData }
     | { type: 'Download' }
     | { type: 'Load', json: StudentInputData }
+    | { type: 'Submit' }
 
 
 export function downloadObjectAsJson(exportObj: StudentInputData, exportName: string) {
@@ -46,7 +55,12 @@ function reducer(state: StudentInputData, action: SaveActions): StudentInputData
             downloadObjectAsJson(state, 'sample-problem');
             return state;
         case "Load":
-            return action.json;
+            console.log(action.json);
+            // return { ...action.json };
+            return Object.assign({}, action.json);
+        case "Submit":
+            console.log(state);
+            return state;
         default:
             return state;
     }
@@ -54,7 +68,16 @@ function reducer(state: StudentInputData, action: SaveActions): StudentInputData
 
 const emptySaveState = {};
 
-export const StudentInputContext = createContext<{ dispatch?: Dispatch<SaveActions>, state: StudentInputData }>({ state: emptySaveState });
+type StudentInputContextType = {
+    dispatch?: Dispatch<SaveActions>,
+    state: StudentInputData,
+    localSeed: number,
+    setLocalSeed: (s: number) => void,
+    result: ResultData | null,
+    setResult: (x: ResultData | null) => void,
+};
+
+export const StudentInputContext = createContext<StudentInputContextType>({ state: emptySaveState, localSeed: 0, setLocalSeed: _.noop, result: null, setResult: _.noop });
 
 /**
  * Pass in your component's uniqueName to access scoped storage.
@@ -71,13 +94,23 @@ export function useStudentInputs<T extends StudentInputs>(uniqueName: string) {
     }
 }
 
+interface ResultData {
+    score: number;
+}
+
 export const StudentInputProvider: React.FC = ({ children }) => {
     const [state, dispatch] = useReducer<Reducer<StudentInputData, SaveActions>>(reducer, emptySaveState);
+    const [result, setResult] = useState<ResultData | null>(null);
+    const [localSeed, setLocalSeed] = useState<number>(0);
+
+    useEffect(() => {
+        window.chance = new Chance(localSeed);
+    }, [localSeed]);
 
     // Debug
     (window as any).StudentInputProvider = dispatch;
 
-    return <StudentInputContext.Provider value={{ dispatch, state }}>
+    return <StudentInputContext.Provider value={{ dispatch, state, localSeed, setLocalSeed, result, setResult }}>
         {children}
     </StudentInputContext.Provider>
 }

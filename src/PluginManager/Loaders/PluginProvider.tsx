@@ -1,7 +1,9 @@
 // This component is responsible for exposing a Register function for plugins, and passing those plugins down to the UI.
 
-import { createContext, useEffect, useState } from "react";
-import { ComponentPlugin, ComponentPluginConstructor, ReactComponentPlugin, ReactComponentPluginElement } from "../ComponentPlugin";
+import _ from "lodash";
+import React from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
+import { ComponentPlugin, ComponentPluginConstructor, ComponentPluginState, ReactComponentPlugin, ReactComponentPluginElement } from "../ComponentPlugin";
 
 interface DefaultImport {
     default: SupportedPluginImports;
@@ -11,7 +13,15 @@ export type SupportedPluginTypes = ReactComponentPluginElement | ComponentPlugin
 
 export type SupportedPluginImports = ReactComponentPlugin | ComponentPluginConstructor;
 
-export const PluginContext = createContext<SupportedPluginImports[]>([]);
+type PluginContextProvides = {
+    plugins: SupportedPluginImports[],
+    utilities: {
+        createComponentInstance?: (name: string, uniqueName: string) => SupportedPluginTypes,
+        findPluginConstructorByName?: (name: string) => SupportedPluginImports | undefined
+    }
+};
+
+export const PluginContext = createContext<PluginContextProvides>({ plugins: [], utilities: {} });
 
 export const PluginProvider: React.FC = ({ children }) => {
     const [components, setComponents] = useState<SupportedPluginImports[]>([]);
@@ -31,7 +41,24 @@ export const PluginProvider: React.FC = ({ children }) => {
         setComponents(plugins);
     }, []);
 
-    return <PluginContext.Provider value={components}>
+    const findPluginConstructorByName = useCallback((name: string) => _.find(components, ['name', name]), [components]);
+
+    const createComponentInstance = useCallback((name: string, uniqueName: string): SupportedPluginTypes => {
+        const pluginConstructor = findPluginConstructorByName(name);
+        if (!pluginConstructor) {
+            console.warn('Could not find a plugin for ', name);
+            throw new Error(`Missing plugin ${name}`);
+        }
+
+        if ('_ComponentPlugin' in pluginConstructor) {
+            return new pluginConstructor(uniqueName);
+        } else {
+            return React.createElement(pluginConstructor, { instanceName: uniqueName, state: ComponentPluginState.DISPLAY })
+        }
+    }, [findPluginConstructorByName]);
+
+
+    return <PluginContext.Provider value={{ plugins: components, utilities: { createComponentInstance, findPluginConstructorByName } }}>
         {children}
     </PluginContext.Provider>
 }

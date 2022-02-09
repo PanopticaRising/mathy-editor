@@ -2,7 +2,7 @@ interface VariablePluginProps {
     uniqueIdentifier: string
 }
 
-export type VariablePluginUI = React.FC<VariablePluginProps>;
+export type VariablePluginUI<T = any> = React.FC<VariablePluginProps> & { defaultCustomization: T };
 
 type CustomInputs = {
     [x: string]: unknown;
@@ -11,5 +11,5 @@ type CustomInputs = {
 export interface VariablePlugin {
     type: string,
     interface: VariablePluginUI,
-    function: (randomSeed: number, customInputs: CustomInputs) => unknown,
+    function: (randomSeed: string, customInputs: CustomInputs) => unknown,
 }

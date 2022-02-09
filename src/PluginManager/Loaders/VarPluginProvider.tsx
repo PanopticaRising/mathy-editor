@@ -1,6 +1,7 @@
 // This component is responsible for exposing a Register function for plugins, and passing those plugins down to the UI.
 
-import { createContext, useEffect, useState } from "react";
+import _ from "lodash";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { VariablePlugin } from "../VariablePlugins/VariablePluginDefinitions";
 
 interface DefaultVarImport {
@@ -26,7 +27,10 @@ export const VarPluginProvider: React.FC = ({ children }) => {
     }
 
     useEffect(() => {
-        const plugins = importAllPlugins().map(classDef => classDef.default);
+        const plugins = importAllPlugins().map(classDef => {
+            classDef.default.function = _.memoize(classDef.default.function);
+            return classDef.default
+        });
         setVarPlugins(plugins);
     }, []);
 

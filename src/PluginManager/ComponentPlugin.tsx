@@ -77,6 +77,13 @@ export enum ComponentPluginState {
     LOCKED,
 }
 
+// This is the successor to the ComponentPluginState. The intention is that there are only 2 types of page, which makes for
+// a better descriptor of how the component is displayed.
+export enum ComponentPluginPageType {
+    DESIGNER,
+    VIEW
+}
+
 // Have a context to store Answers.
 // If a component needs to imperitavely collect answers, let it register a Collect() function with the context that can be called at submit-time.
 // Otherwise, components can use a wrapper around the context to dynamically update the context with Answers.
@@ -86,6 +93,6 @@ interface ReactComponentProps {
     state: ComponentPluginState,
 };
 
-export type ReactComponentPlugin<T extends Customizations = {}> = React.FC<ReactComponentProps> & { displayName: string } & { defaultValues: T };
+export type ReactComponentPlugin<T extends Customizations = {}, C = {}> = React.FC<ReactComponentProps> & { displayName: string } & { defaultValues: T } & { defaultCustomization: C };
 export type ReactComponentPluginElement = React.FunctionComponentElement<ReactComponentProps>;
 
