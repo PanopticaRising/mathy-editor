@@ -54,10 +54,10 @@ export const SupportedPluginsFactory: React.FC<SupportedPluginFactoryProps> = ({
     </Draggable>
 }
 
-SupportedPluginsFactory.whyDidYouRender = {
-    customName: 'SupportedPluginsFactory',
-    logOnDifferentValues: true,
-    logOwnerReasons: true,
-}
+// SupportedPluginsFactory.whyDidYouRender = {
+//     customName: 'SupportedPluginsFactory',
+//     logOnDifferentValues: true,
+//     logOwnerReasons: true,
+// }
 
 export default SupportedPluginsFactory;
