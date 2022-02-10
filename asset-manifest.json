@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/mathy-editor/static/css/main.bd54625c.css",
+    "main.js": "/mathy-editor/static/js/main.dabdb6d0.js",
+    "static/js/787.62bce1c8.chunk.js": "/mathy-editor/static/js/787.62bce1c8.chunk.js",
+    "index.html": "/mathy-editor/index.html",
+    "main.bd54625c.css.map": "/mathy-editor/static/css/main.bd54625c.css.map",
+    "main.dabdb6d0.js.map": "/mathy-editor/static/js/main.dabdb6d0.js.map",
+    "787.62bce1c8.chunk.js.map": "/mathy-editor/static/js/787.62bce1c8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bd54625c.css",
+    "static/js/main.dabdb6d0.js"
+  ]
+}
