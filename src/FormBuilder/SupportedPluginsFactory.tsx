@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Draggable } from "react-beautiful-dnd";
+import { Draggable } from "@hello-pangea/dnd";
 import { ComponentPlugin, ComponentPluginState, getSupportedDisplayName, getSupportedInstanceName } from "../PluginManager/ComponentPlugin";
 import { SupportedPluginTypes } from "../PluginManager/Loaders/PluginProvider";
 import { EditableBoxWrapper } from "./EditableBoxWrapper";

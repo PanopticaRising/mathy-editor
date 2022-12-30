@@ -35,5 +35,18 @@ module.exports = {
         alias: {
             'react-redux': process.env.NODE_ENV === 'development' ? 'react-redux/lib' : 'react-redux'
         }
-    }
+    },
+    eslint: {
+        enable: true /* (default value) */,
+        mode: 'extends' /* (default value) */ || 'file',
+        configure: (eslintConfig, { env, paths }) => {
+            /* ... */
+            eslintConfig.rules['no-unused-vars'] = ["warning", { "varsIgnorePattern": "^_" }]
+            return eslintConfig;
+        },
+        pluginOptions: (eslintPluginOptions, { env, paths }) => {
+            /* ... */
+            return eslintPluginOptions;
+        },
+    },
 };

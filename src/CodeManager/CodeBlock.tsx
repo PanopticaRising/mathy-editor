@@ -1,24 +1,16 @@
 import { useCallback, useContext, useEffect, useRef } from "react"
 
-import { keymap, highlightSpecialChars, drawSelection, highlightActiveLine, EditorView } from "@codemirror/view"
+import { keymap, highlightSpecialChars, drawSelection, highlightActiveLine, EditorView, rectangularSelection, lineNumbers, highlightActiveLineGutter } from "@codemirror/view"
 import { Compartment, EditorState } from "@codemirror/state"
-import { history, historyKeymap } from "@codemirror/history"
-import { foldGutter, foldKeymap } from "@codemirror/fold"
-import { indentOnInput } from "@codemirror/language"
-import { lineNumbers, highlightActiveLineGutter } from "@codemirror/gutter"
-import { defaultKeymap } from "@codemirror/commands"
-import { bracketMatching } from "@codemirror/matchbrackets"
-import { closeBrackets, closeBracketsKeymap } from "@codemirror/closebrackets"
+import { indentOnInput, bracketMatching, foldGutter, foldKeymap, defaultHighlightStyle } from "@codemirror/language"
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands"
 import { searchKeymap, highlightSelectionMatches } from "@codemirror/search"
-import { autocompletion, completionKeymap, completeFromList } from "@codemirror/autocomplete"
-import { commentKeymap } from "@codemirror/comment"
-import { rectangularSelection } from "@codemirror/rectangular-selection"
-import { defaultHighlightStyle } from "@codemirror/highlight"
+import { autocompletion, completionKeymap, completeFromList, closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete"
 import { lintKeymap } from "@codemirror/lint"
 import { oneDark } from "@codemirror/theme-one-dark"
 import { SaveStateContext, SUPPORTED_CODING_TYPES } from "../PluginManager/Loaders/SaveStateManager"
-import { Accordion, AccordionSummary, Typography, AccordionDetails, Select, MenuItem } from "@material-ui/core"
-import { ExpandMore } from "@material-ui/icons"
+import { Accordion, AccordionSummary, Typography, AccordionDetails, Select, MenuItem } from "@mui/material"
+import { ExpandMore } from "@mui/icons-material"
 import _ from "lodash"
 import { StudentInputContext } from "../PluginManager/Loaders/StudentInputManager"
 
@@ -52,7 +44,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ uniqueName, code, lang }) 
         }
     }
 
-    const saveCode = useCallback(update => {
+    const saveCode = useCallback((update: { docChanged: any; state: { toJSON: () => any } }) => {
         if (update.docChanged) {
             dispatch?.({ type: 'SaveCode', uniqueName, code: update.state.toJSON() })
         }
@@ -83,7 +75,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ uniqueName, code, lang }) 
                 drawSelection(),
                 EditorState.allowMultipleSelections.of(true),
                 indentOnInput(),
-                defaultHighlightStyle.fallback,
+                // defaultHighlightStyle.fallback,
                 bracketMatching(),
                 closeBrackets(),
                 autocompletion({
@@ -106,7 +98,6 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ uniqueName, code, lang }) 
                     ...searchKeymap,
                     ...historyKeymap,
                     ...foldKeymap,
-                    ...commentKeymap,
                     ...completionKeymap,
                     ...lintKeymap
                 ]),

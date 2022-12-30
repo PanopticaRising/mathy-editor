@@ -15,7 +15,7 @@ export type SupportedVarPluginImports = VariablePlugin;
 
 export const VarPluginContext = createContext<SupportedVarPluginImports[]>([]);
 
-export const VarPluginProvider: React.FC = ({ children }) => {
+export const VarPluginProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [varPlugins, setVarPlugins] = useState<SupportedVarPluginImports[]>([]);
 
     const importAllPlugins = (): DefaultVarImport[] => {

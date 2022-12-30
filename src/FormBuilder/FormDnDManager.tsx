@@ -1,6 +1,6 @@
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { PluginContext, SupportedPluginTypes } from '../PluginManager/Loaders/PluginProvider';
 import { FormComponentPane } from './FormComponentPane';
 import { FormGUI } from './FormGUI';
@@ -8,7 +8,7 @@ import React from 'react';
 import { SaveStateContext } from '../PluginManager/Loaders/SaveStateManager';
 import { StudentInputContext } from '../PluginManager/Loaders/StudentInputManager';
 
-export const FormDnDManager: React.FC = ({ children }) => {
+export const FormDnDManager: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [formList, setFormList] = useState<SupportedPluginTypes[]>([]);
     const { plugins, utilities: { createComponentInstance, findPluginConstructorByName } } = useContext(PluginContext);
     const { dispatch, state } = useContext(SaveStateContext);

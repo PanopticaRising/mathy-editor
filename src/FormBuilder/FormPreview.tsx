@@ -8,7 +8,7 @@ import { SupportedPluginsFactory } from './SupportedPluginsFactory';
 import { ComponentPluginState, getSupportedInstanceName } from '../PluginManager/ComponentPlugin';
 import { SaveStateContext } from "../PluginManager/Loaders/SaveStateManager";
 import { StudentInputContext } from "../PluginManager/Loaders/StudentInputManager";
-import { Alert } from "@material-ui/core";
+import { Alert } from "@mui/material";
 
 export const FormPreview: React.FC = () => {
     const [formList, setFormList] = useState<SupportedPluginTypes[]>([]);

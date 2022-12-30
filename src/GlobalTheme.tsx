@@ -1,13 +1,21 @@
-import { createTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
+import {
+    createTheme,
+    CssBaseline,
+    ThemeProvider,
+    Theme,
+    StyledEngineProvider,
+    adaptV4Theme,
+} from '@mui/material';
 import { useMemo, useState } from 'react';
 
-export const GlobalTheme: React.FC<{}> = ({ children }) => {
+
+export const GlobalTheme: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const [prefersDarkMode, setPrefersDarkMode] = useState(true);
 
     const theme = useMemo(
         () =>
-            createTheme({
+            createTheme(adaptV4Theme({
                 palette: {
                     mode: prefersDarkMode ? 'dark' : 'light',
                     primary: {
@@ -18,15 +26,19 @@ export const GlobalTheme: React.FC<{}> = ({ children }) => {
                         main: '#f50057',
                     },
                 },
-            }),
+            })),
         [prefersDarkMode],
     );
 
-    return <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-        <button onClick={() => setPrefersDarkMode(!prefersDarkMode)}>Lights</button>
-    </ThemeProvider>;
+    return (
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                {children}
+                <button onClick={() => setPrefersDarkMode(!prefersDarkMode)}>Lights</button>
+            </ThemeProvider>
+        </StyledEngineProvider>
+    );
 }
 
 export default GlobalTheme;

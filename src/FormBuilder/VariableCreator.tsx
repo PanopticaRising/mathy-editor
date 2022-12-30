@@ -1,7 +1,7 @@
 // The Variable Creator provides a dropdown to select the type of variable, and a textarea to define the code to run it.
 
-import { MenuItem, Select } from "@material-ui/core"
-import { Box } from "@material-ui/system"
+import { MenuItem, Select } from "@mui/material"
+import { Box } from "@mui/system"
 import _ from "lodash";
 import React from "react";
 import { DragEventHandler, useContext, useState } from "react";

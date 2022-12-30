@@ -98,7 +98,7 @@ interface ResultData {
     score: number;
 }
 
-export const StudentInputProvider: React.FC = ({ children }) => {
+export const StudentInputProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [state, dispatch] = useReducer<Reducer<StudentInputData, SaveActions>>(reducer, emptySaveState);
     const [result, setResult] = useState<ResultData | null>(null);
     const [localSeed, setLocalSeed] = useState<number>(0);

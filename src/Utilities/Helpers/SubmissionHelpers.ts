@@ -4,7 +4,7 @@ import { SaveStateContext, SUPPORTED_CODING_TYPES } from "../../PluginManager/Lo
 import { StudentInputContext, StudentInputData } from "../../PluginManager/Loaders/StudentInputManager";
 import { VarPluginContext } from "../../PluginManager/Loaders/VarPluginProvider";
 import PyodideContext from "../../PyodideContext";
-import { ComputeEngine, match } from '@cortex-js/compute-engine';
+import { ComputeEngine } from '@cortex-js/compute-engine';
 
 interface CodeComponents {
     localSeed: string;
@@ -36,7 +36,7 @@ const interpolateJSCode = ({ localSeed, VARIABLES, STUDENT_INPUTS, code }: CodeC
 
 const getJSRunner = (code: string) => {
     // eslint-disable-next-line no-new-func
-    return Function('ce', 'match', code);
+    return Function('ce', code);
 }
 
 const interpolateStudentInputsToPython = (stateStudentInput: StudentInputData) => (
@@ -156,9 +156,9 @@ export function useSubmitter(eventUniqueName: string) {
         console.log(runner);
 
         const ce = new ComputeEngine();
-        console.log(ce, match);
+        console.log(ce);
 
-        let s = (codeData.lang === SUPPORTED_CODING_TYPES.PYTHON && pyodide) ? await pyodide(runner, undefined) : getJSRunner(runner)(ce, match);
+        let s = (codeData.lang === SUPPORTED_CODING_TYPES.PYTHON && pyodide) ? await pyodide(runner, undefined) : getJSRunner(runner)(ce);
 
         console.log(s);
 

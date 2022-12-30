@@ -1,5 +1,5 @@
-import { Box, Container, Grid, Tab } from "@material-ui/core";
-import { TabContext, TabList, TabPanel } from "@material-ui/lab";
+import { Box, Container, Grid, Tab } from "@mui/material";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { SyntheticEvent, useState } from "react";
 import { FormBuilderPane } from "./FormBuilder/FormBuilderPane";
 import { Form } from './Mocks/Form';
@@ -7,7 +7,7 @@ import { PyodideContext } from './PyodideContext';
 import { FormPreview } from './FormBuilder/FormPreview';
 import { CoderPane } from "./CodeManager/CoderPane";
 import _ from "lodash";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
 enum RoutingTabs {
     DESIGNER = 'Designer',

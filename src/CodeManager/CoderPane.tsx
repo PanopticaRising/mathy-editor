@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@mui/material";
 import { SaveStateContext } from "../PluginManager/Loaders/SaveStateManager";
 import CodeBlock from './CodeBlock';
 import _ from 'lodash';

@@ -15,7 +15,7 @@ export interface SavedData {
     Components: SavedComponentData[],
     Variables: SavedComponentData[],
     Code: CodeBlockData,
-    // This is a hack for react-beautiful-dnd, which doesn't provide nesting support.
+    // This is a hack for @hello-pangea/dnd, which doesn't provide nesting support.
     editFocus?: UniqueName;
 }
 
@@ -90,6 +90,14 @@ function reducer(state: SavedData, action: SaveActions): SavedData {
     console.log(`Recieved action for ${action.type}`, action);
     switch (action.type) {
         case "AddNewComponent":
+            const isAlreadyAdded = findByUniqueName(state, action.component.uniqueName) !== null;
+
+            if (isAlreadyAdded) {
+                console.warn('A Component was added twice.')
+                // TODO: Figure out why this needs to be spread.
+                return { ...state };
+            }
+
             if (action.parent) {
                 // TODO: This does not account for multi-nested objects.
                 //       I think in the future, Components should become a flat array, and a new object
@@ -108,7 +116,9 @@ function reducer(state: SavedData, action: SaveActions): SavedData {
                     parent.customizations.children = [action.component];
                 }
             } else {
-                state.Components.splice(action.newIndex, 0, action.component);
+                console.log('gib', JSON.stringify(state.Components));
+                state.Components.splice(action.newIndex, 0, { ...action.component });
+                console.log('gib2', JSON.stringify(state.Components));
             }
 
             console.log(state);
@@ -302,7 +312,7 @@ const findByUniqueName = (state: SavedData, uniqueName: UniqueName) => {
     return state.Components.reduce(matchUniqueName, null);
 }
 
-export const SaveStateProvider: React.FC = ({ children }) => {
+export const SaveStateProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [state, dispatch] = useReducer<Reducer<SavedData, SaveActions>>(reducer, emptySaveState);
 
     const findInComponentTreeByUniqueName = _.partial(findByUniqueName, state);
@@ -310,7 +320,7 @@ export const SaveStateProvider: React.FC = ({ children }) => {
     // Debug
     (window as any).SaveStateProvider = dispatch;
     (window as any).loadProblem = async (filename: string) => {
-        const res = await fetch(`${window.location.origin}/examples/${filename}.json`);
+        const res = await fetch(`${window.location.origin}/mathy-editor/examples/${filename}.json`);
         const json = await res.json();
         console.log(json);
         dispatch({ type: 'Load', json: json });

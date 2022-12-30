@@ -67,8 +67,8 @@ declare global {
 // export const PyodideContext = createContext<IPyodide | null | undefined>(undefined);
 export const PyodideContext = createContext<((script: string, context: Object | undefined) => Promise<unknown>) | undefined>(undefined);
 
-export const PyodideProvider: React.FC<any> = ({ children }) => {
-    const pyRef = useRef<Worker>(new Worker('./pyodide.worker.js'));
+export const PyodideProvider: React.FC<React.PropsWithChildren<any>> = ({ children }) => {
+    const pyRef = useRef<Worker>(new Worker('./mathy-editor/pyodide.worker.js'));
 
     //    const {results, error} = await asyncRun(script, context);
     function asyncRun(script: string, context?: Object) {

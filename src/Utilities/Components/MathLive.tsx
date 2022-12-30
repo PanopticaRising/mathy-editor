@@ -1,5 +1,5 @@
-import { useTheme } from '@material-ui/core';
-import { MathfieldElement, MathfieldConfig } from 'mathlive';
+import { useTheme } from '@mui/material';
+import { MathfieldElement } from 'mathlive';
 import { FC, useEffect, useRef } from 'react';
 
 interface MathLiveProps {
@@ -17,7 +17,7 @@ export const MathLive: FC<MathLiveProps> = ({ disabled, onInput, value }) => {
         if (!ref.current || elem.current) return;
         console.log('Use effect running again, creating new ML');
 
-        const parent = ref.current;
+        // const _parent = ref.current;
 
         // TODO: Bundling the folders from node_modules seems to translate into a root-relative localhost request.
         const ml = new MathfieldElement({

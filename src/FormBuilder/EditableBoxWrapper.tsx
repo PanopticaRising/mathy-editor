@@ -1,8 +1,8 @@
-import { Box } from "@material-ui/core"
-import { styled } from '@material-ui/styles';
+import { Box } from "@mui/material"
+import styled from '@emotion/styled';
 import { useState } from "react";
 import { EditableBoxTools } from "./EditableBoxTools";
-import { DraggableProvided } from "react-beautiful-dnd";
+import { DraggableProvided } from "@hello-pangea/dnd";
 
 const OutlinedBox = styled(Box)({
     borderWidth: 1,
@@ -21,7 +21,7 @@ interface EditableBoxWrapperProps {
 }
 
 // This component provides a consistent border wrapper around GUI elements in the form.
-export const EditableBoxWrapper: React.FC<EditableBoxWrapperProps> = ({ children, dragHandleProps, componentName, innerRef, onClickEdit, ...props }) => {
+export const EditableBoxWrapper: React.FC<React.PropsWithChildren<EditableBoxWrapperProps>> = ({ children, dragHandleProps, componentName, innerRef, onClickEdit, ...props }) => {
     const [hover, setHover] = useState<boolean>(false);
 
     // TODO: Nesting fieldset to fix placeholder issue?

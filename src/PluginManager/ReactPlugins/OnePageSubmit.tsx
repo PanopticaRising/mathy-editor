@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import { Droppable } from 'react-beautiful-dnd';
+import { Droppable } from '@hello-pangea/dnd';
 import { ComponentPluginState, getSupportedInstanceName, ReactComponentPlugin } from '../ComponentPlugin';
 import { SavedData, useCodeBlock, useComponentCustomization } from '../Loaders/SaveStateManager';
-import { Button, List } from '@material-ui/core';
+import { Button, List } from '@mui/material';
 import { SaveStateContext } from '../../PluginManager/Loaders/SaveStateManager';
 import { SupportedPluginsFactory } from '../../FormBuilder/SupportedPluginsFactory';
 import { PluginContext, SupportedPluginTypes } from '../Loaders/PluginProvider';
@@ -25,7 +25,7 @@ export const OnePageSubmit: ReactComponentPlugin = ({ instanceName, state: mode,
     }
 
     // TODO: This component should have a different state so people don't have to unlock it to drag and drop into it.
-    // NOTE: This is currently the way it has to be due to the limitations of react-beautiful-dnd.
+    // NOTE: This is currently the way it has to be due to the limitations of @hello-pangea/dnd.
     if (mode === ComponentPluginState.LOCKED) {
         return <>
             <List>
@@ -44,7 +44,7 @@ export const OnePageSubmit: ReactComponentPlugin = ({ instanceName, state: mode,
     // TODO: Right now, control is ceded to the FormDnDManager. This works for simple, linear representations of problems. However, if Layouts ever
     //       need to be more complicated, we should figure out some way for the FormDnDManager to cede control to the ComponentCustomization, or create
     //       another workflow for layouts.
-    // NOTE: droppableId is 'components' to match FormGUI's droppableid. This is because react-beautiful-dnd does not support nested droppables.
+    // NOTE: droppableId is 'components' to match FormGUI's droppableid. This is because @hello-pangea/dnd does not support nested droppables.
     //       To know where things need to be dropped, use the editFocus in the context.
     return <>
         <Droppable isDropDisabled={savedState.editFocus !== instanceName} droppableId={instanceName}>

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Droppable } from 'react-beautiful-dnd';
+import { Droppable } from '@hello-pangea/dnd';
 import { ComponentPluginState, getSupportedInstanceName } from '../PluginManager/ComponentPlugin';
 import { SupportedPluginTypes } from '../PluginManager/Loaders/PluginProvider';
 import { SupportedPluginsFactory } from './SupportedPluginsFactory';

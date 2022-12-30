@@ -1,7 +1,7 @@
-import { ListItem, ListItemButton, ListItemIcon, ListItemText } from "@material-ui/core"
-import { TextFields } from "@material-ui/icons"
+import { ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
+import { TextFields } from "@mui/icons-material"
 import { useContext } from "react"
-import { Draggable } from "react-beautiful-dnd"
+import { Draggable } from "@hello-pangea/dnd"
 import { getSupportedDisplayName } from "../PluginManager/ComponentPlugin"
 import { PluginContext } from "../PluginManager/Loaders/PluginProvider"
 

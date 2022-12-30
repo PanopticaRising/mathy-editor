@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Button, List, Typography } from "@material-ui/core";
-import { ExpandMore } from "@material-ui/icons";
-import { Droppable } from "react-beautiful-dnd";
+import { Accordion, AccordionDetails, AccordionSummary, Button, List, Typography } from "@mui/material";
+import { ExpandMore } from "@mui/icons-material";
+import { Droppable } from "@hello-pangea/dnd";
 import { SavedComponentData, SaveStateContext } from "../PluginManager/Loaders/SaveStateManager";
 import { DraggableComponentList } from "./DraggableComponentList";
 import { VariableCreator } from "./VariableCreator";

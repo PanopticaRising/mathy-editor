@@ -23,7 +23,7 @@ type PluginContextProvides = {
 
 export const PluginContext = createContext<PluginContextProvides>({ plugins: [], utilities: {} });
 
-export const PluginProvider: React.FC = ({ children }) => {
+export const PluginProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [components, setComponents] = useState<SupportedPluginImports[]>([]);
 
     const importAllPlugins = (): DefaultImport[] => {
